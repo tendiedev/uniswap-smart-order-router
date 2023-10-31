@@ -1,4 +1,4 @@
-# Uniswap Smart Order Router
+# Uniswap Smart Order Router - Tenet Network
 
 This repository contains routing logic for the Uniswap V3 protocol.
 
@@ -15,5 +15,3 @@ npm install
 npm run build
 npm publish --access public
 ```
-
-You will need an NPMJS key; please ping gnarlycow for this.
