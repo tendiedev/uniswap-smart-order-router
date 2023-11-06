@@ -37,8 +37,8 @@ type RawV2SubgraphPool = {
 };
 
 const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev',
+  [ChainId.TENET]:
+    'https://api.goldsky.com/api/public/project_clomusd0p3rgz2nwzbw0qgj8i/subgraphs/v2-subgraph/1.0.0/gn',
 };
 
 const threshold = 0.025;
@@ -105,10 +105,9 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
     let pools: RawV2SubgraphPool[] = [];
 
     log.info(
-      `Getting V2 pools from the subgraph with page size ${this.pageSize}${
-        providerConfig?.blockNumber
-          ? ` as of block ${providerConfig?.blockNumber}`
-          : ''
+      `Getting V2 pools from the subgraph with page size ${this.pageSize}${providerConfig?.blockNumber
+        ? ` as of block ${providerConfig?.blockNumber}`
+        : ''
       }.`
     );
 

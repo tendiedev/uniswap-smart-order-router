@@ -16,8 +16,8 @@ export enum ChainId {
   AVALANCHE = 43114,
   BASE_GOERLI = 84531,
   BASE = 8453,
-  TENET_TESTNET = 3441005,
-  TENET = 169,
+  TENET_TESTNET = 155,
+  TENET = 1559,
 }
 
 type ChainAddresses = {
