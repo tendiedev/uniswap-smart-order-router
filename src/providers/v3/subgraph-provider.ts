@@ -65,9 +65,9 @@ const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
   [ChainId.BASE]:
     'https://api.studio.thegraph.com/query/48211/uniswap-v3-base/version/latest',
   [ChainId.TENET_TESTNET]:
-    'https://d3lcl3uht06cq4.cloudfront.net/subgraphs/name/aperture/uniswap-v3',
+    'https://api.goldsky.com/api/public/project_clomoyc1z0iy52nsdhm9s7vfg/subgraphs/tendieswapv3/1.0.0/gn',
   [ChainId.TENET]:
-    'https://api.goldsky.com/api/public/project_clnz7akg41cv72ntv0uhyd3ai/subgraphs/aperture/uniswap-v3/gn',
+    'https://api.goldsky.com/api/public/project_clomoyc1z0iy52nsdhm9s7vfg/subgraphs/tendieswapv3/1.0.0/gn',
 };
 
 const PAGE_SIZE = 1000; // 1k is max possible query size from subgraph.

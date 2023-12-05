@@ -38,7 +38,7 @@ type RawV2SubgraphPool = {
 
 const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
   [ChainId.TENET]:
-    'https://api.goldsky.com/api/public/project_clomusd0p3rgz2nwzbw0qgj8i/subgraphs/v2-subgraph/1.0.0/gn',
+    'https://api.goldsky.com/api/public/project_clomoyc1z0iy52nsdhm9s7vfg/subgraphs/tendiev2-subgraph/1.0.0/gn',
 };
 
 const threshold = 0.025;

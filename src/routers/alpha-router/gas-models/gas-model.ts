@@ -181,9 +181,11 @@ export abstract class IOnChainGasModelFactory {
   public abstract buildGasModel({
     chainId,
     gasPriceWei,
+    //@ts-expect-error
     pools: LiquidityCalculationPools,
     amountToken,
     quoteToken,
+    //@ts-expect-error
     v2poolProvider: V2poolProvider,
     l2GasDataProvider,
     providerConfig,

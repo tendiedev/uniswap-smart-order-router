@@ -87,8 +87,8 @@ export enum ChainName {
   AVALANCHE = 'avalanche-mainnet',
   BASE = 'base-mainnet',
   BASE_GOERLI = 'base-goerli',
-  TENET_TESTNET = 'manta-pacific-testnet',
-  TENET = 'manta-pacific',
+  TENET_TESTNET = 'tenet-testnet',
+  TENET = 'tenet',
 }
 
 export enum NativeCurrencyName {
@@ -100,6 +100,7 @@ export enum NativeCurrencyName {
   MOONBEAM = 'GLMR',
   BNB = 'BNB',
   AVALANCHE = 'AVAX',
+  TENET = 'TENET',
 }
 
 export const NATIVE_NAMES_BY_ID: { [chainId: number]: string[] } = {
@@ -187,8 +188,8 @@ export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
   [ChainId.BNB]: NativeCurrencyName.BNB,
   [ChainId.AVALANCHE]: NativeCurrencyName.AVALANCHE,
   [ChainId.BASE]: NativeCurrencyName.ETHER,
-  [ChainId.TENET_TESTNET]: NativeCurrencyName.ETHER,
-  [ChainId.TENET]: NativeCurrencyName.ETHER,
+  [ChainId.TENET_TESTNET]: NativeCurrencyName.TENET,
+  [ChainId.TENET]: NativeCurrencyName.TENET,
 };
 
 export const ID_TO_NETWORK_NAME = (id: number): ChainName => {
@@ -403,17 +404,17 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId in ChainId]: Token } = {
   ),
   [ChainId.TENET_TESTNET]: new Token(
     ChainId.TENET_TESTNET,
-    '0xdB1fE098232A00A8B81dd6c2A911f2486cb374EE',
+    '0xF7c99B019424C7A89DAE252fD872F9b3EBe6cfaC',
     18,
-    'WETH',
-    'Wrapped Ether'
+    'wTNT',
+    'Wrapped Tenet'
   ),
   [ChainId.TENET]: new Token(
     ChainId.TENET,
-    '0x0Dc808adcE2099A9F62AA87D9670745AbA741746',
+    '0xd6cb8a253e12893b0cF39Ca78F7d858652cCa1fe',
     18,
-    'WETH',
-    'Wrapped Ether'
+    'wTNT',
+    'Wrapped Tenet'
   ),
 };
 

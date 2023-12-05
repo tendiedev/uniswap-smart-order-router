@@ -1,7 +1,7 @@
 {
   "name": "@tendieswap/uniswap-smart-order-router",
-  "version": "0.2.5",
-  "description": "Uniswap Smart Order Router",
+  "version": "0.3.0",
+  "description": "Tenet Smart Order Router",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
