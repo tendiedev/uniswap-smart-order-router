@@ -1,7 +1,7 @@
 import { Logger } from '@ethersproject/logger';
 import { flags } from '@oclif/command';
 import { Protocol } from '@uniswap/router-sdk';
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import { Currency, Percent, TradeType } from '@tendieswap/sdk-core';
 import dotenv from 'dotenv';
 import _ from 'lodash';
 
@@ -120,16 +120,16 @@ export class Quote extends BaseCommand {
     const tokenIn: Currency = NATIVE_NAMES_BY_ID[chainId]!.includes(tokenInStr)
       ? nativeOnChain(chainId)
       : (await tokenProvider.getTokens([tokenInStr])).getTokenByAddress(
-          tokenInStr
-        )!;
+        tokenInStr
+      )!;
 
     const tokenOut: Currency = NATIVE_NAMES_BY_ID[chainId]!.includes(
       tokenOutStr
     )
       ? nativeOnChain(chainId)
       : (await tokenProvider.getTokens([tokenOutStr])).getTokenByAddress(
-          tokenOutStr
-        )!;
+        tokenOutStr
+      )!;
 
     let swapRoutes: SwapRoute | null;
     if (exactIn) {
@@ -140,11 +140,11 @@ export class Quote extends BaseCommand {
         TradeType.EXACT_INPUT,
         recipient
           ? {
-              type: SwapType.SWAP_ROUTER_02,
-              deadline: 100,
-              recipient,
-              slippageTolerance: new Percent(5, 100),
-            }
+            type: SwapType.SWAP_ROUTER_02,
+            deadline: 100,
+            recipient,
+            slippageTolerance: new Percent(5, 100),
+          }
           : undefined,
         {
           blockNumber: this.blockNumber,
@@ -177,11 +177,11 @@ export class Quote extends BaseCommand {
         TradeType.EXACT_OUTPUT,
         recipient
           ? {
-              type: SwapType.SWAP_ROUTER_02,
-              deadline: 100,
-              recipient,
-              slippageTolerance: new Percent(5, 10_000),
-            }
+            type: SwapType.SWAP_ROUTER_02,
+            deadline: 100,
+            recipient,
+            slippageTolerance: new Percent(5, 10_000),
+          }
           : undefined,
         {
           blockNumber: this.blockNumber - 10,
@@ -210,8 +210,7 @@ export class Quote extends BaseCommand {
 
     if (!swapRoutes) {
       log.error(
-        `Could not find route. ${
-          debug ? '' : 'Run in debug mode for more info'
+        `Could not find route. ${debug ? '' : 'Run in debug mode for more info'
         }.`
       );
       return;

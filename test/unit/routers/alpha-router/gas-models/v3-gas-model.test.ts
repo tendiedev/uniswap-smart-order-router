@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Ether, Token } from '@uniswap/sdk-core';
+import { Currency, CurrencyAmount, Ether, Token } from '@tendieswap/sdk-core';
 import { BigNumber } from 'ethers';
 import _ from 'lodash';
 import {
@@ -58,17 +58,17 @@ describe('v3 gas model tests', () => {
     const nativeCurrency = WRAPPED_NATIVE_CURRENCY[chainId];
     const nativeQuoteTokenV3PoolPromise = !quoteToken.equals(nativeCurrency)
       ? getHighestLiquidityV3NativePool(
-          quoteToken,
-          v3PoolProvider,
-          providerConfig
-        )
+        quoteToken,
+        v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
     const nativeAmountTokenV3PoolPromise = !amountToken.equals(nativeCurrency)
       ? getHighestLiquidityV3NativePool(
-          amountToken,
-          v3PoolProvider,
-          providerConfig
-        )
+        amountToken,
+        v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
 
     const [usdPool, nativeQuoteTokenV3Pool, nativeAmountTokenV3Pool] =

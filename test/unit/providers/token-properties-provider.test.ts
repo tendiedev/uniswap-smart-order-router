@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@tendieswap/sdk-core';
 import NodeCache from 'node-cache';
 import sinon from 'sinon';
 import {
@@ -93,7 +93,7 @@ describe('TokenPropertiesProvider', () => {
       assertExpectedTokenProperties(cachedTokenProperties, BigNumber.from(213), BigNumber.from(800), TokenValidationResult.FOT);
     })
 
-    it('succeeds to get token fee cache hit and second token fee fetcher call is skipped', async function() {
+    it('succeeds to get token fee cache hit and second token fee fetcher call is skipped', async function () {
       const token = USDC_MAINNET
 
       expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))).toBeUndefined();
@@ -108,7 +108,7 @@ describe('TokenPropertiesProvider', () => {
       sinon.assert.calledOnce(mockTokenFeeFetcher.fetchFees)
     });
 
-    it('succeeds to get token allowlist with no on-chain calls nor caching', async function() {
+    it('succeeds to get token allowlist with no on-chain calls nor caching', async function () {
       const allowListToken = new Token(1, '0x777E2ae845272a2F540ebf6a3D03734A5a8f618e', 18);
       const tokenPropertiesMap = await tokenPropertiesProvider.getTokensProperties([allowListToken], { enableFeeOnTransferFeeFetching: true });
 
@@ -119,7 +119,7 @@ describe('TokenPropertiesProvider', () => {
       expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, allowListToken.address.toLowerCase()))).toBeUndefined();
     });
 
-    it('succeeds to get token properties in a single batch', async function() {
+    it('succeeds to get token properties in a single batch', async function () {
       const token1 = new Token(1, '0x0000000000000000000000000000000000000012', 18);
       const token2 = new Token(1, '0x0000000000000000000000000000000000000034', 18);
       const token3 = new Token(1, '0x0000000000000000000000000000000000000056', 18);
@@ -154,7 +154,7 @@ describe('TokenPropertiesProvider', () => {
       }
     });
 
-    it('all tokens in the batch failed to get token validation result, no fees fetched', async function() {
+    it('all tokens in the batch failed to get token validation result, no fees fetched', async function () {
       const token1 = new Token(1, '0x0000000000000000000000000000000000000012', 18);
       const token2 = new Token(1, '0x0000000000000000000000000000000000000034', 18);
       const token3 = new Token(1, '0x0000000000000000000000000000000000000056', 18);
@@ -198,7 +198,7 @@ describe('TokenPropertiesProvider', () => {
       }
     });
 
-    it('all token fee fetch failed', async function() {
+    it('all token fee fetch failed', async function () {
       const token1 = new Token(1, '0x0000000000000000000000000000000000000012', 18);
       const token2 = new Token(1, '0x0000000000000000000000000000000000000034', 18);
       const token3 = new Token(1, '0x0000000000000000000000000000000000000056', 18);

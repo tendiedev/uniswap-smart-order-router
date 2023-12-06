@@ -1,4 +1,4 @@
-import { Token } from '@uniswap/sdk-core';
+import { Token } from '@tendieswap/sdk-core';
 import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
 
 import { ChainId, CHAIN_TO_ADDRESSES_MAP } from './chain-to-addresses';
@@ -92,6 +92,9 @@ export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
 export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
   if (chainId == ChainId.BNB) {
     return BNB_SWAP_ROUTER_02_ADDRESS;
+  }
+  if (chainId == ChainId.TENET) {
+    return CHAIN_TO_ADDRESSES_MAP[ChainId.TENET].swapRouter02Address!;
   }
   return '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
 };

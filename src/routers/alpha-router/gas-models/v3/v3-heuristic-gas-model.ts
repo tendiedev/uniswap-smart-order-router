@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Percent, Price, TradeType } from '@uniswap/sdk-core';
+import { Percent, Price, TradeType } from '@tendieswap/sdk-core';
 import { Pool } from '@uniswap/v3-sdk';
 import _ from 'lodash';
 

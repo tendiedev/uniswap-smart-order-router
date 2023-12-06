@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Protocol } from '@uniswap/router-sdk';
-import { Currency, Token, TradeType } from '@uniswap/sdk-core';
+import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
 import { Pair } from '@uniswap/v2-sdk';
 import { Pool } from '@uniswap/v3-sdk';
 import _ from 'lodash';
@@ -41,9 +41,9 @@ import { GetQuotesResult, GetRoutesResult } from './model/results';
  */
 export abstract class BaseQuoter<
   CandidatePools extends
-    | V2CandidatePools
-    | V3CandidatePools
-    | [V3CandidatePools, V2CandidatePools],
+  | V2CandidatePools
+  | V3CandidatePools
+  | [V3CandidatePools, V2CandidatePools],
   Route extends V2Route | V3Route | MixedRoute
 > {
   protected tokenProvider: ITokenProvider;
@@ -215,8 +215,7 @@ export abstract class BaseQuoter<
 
       if (token0Invalid || token1Invalid) {
         log.info(
-          `Dropping pool ${poolToString(pool)} because token is invalid. ${
-            pool.token0.symbol
+          `Dropping pool ${poolToString(pool)} because token is invalid. ${pool.token0.symbol
           }: ${token0Validation}, ${pool.token1.symbol}: ${token1Validation}`
         );
       }

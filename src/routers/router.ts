@@ -11,8 +11,8 @@ import {
   Percent,
   Token,
   TradeType,
-} from '@uniswap/sdk-core';
-import { SwapOptions as UniversalRouterSwapOptions } from '@uniswap/universal-router-sdk';
+} from '@tendieswap/sdk-core';
+import { SwapOptions as UniversalRouterSwapOptions } from '@tendieswap/universal-router-sdk-tenet';
 import { Route as V2RouteRaw } from '@uniswap/v2-sdk';
 import {
   Pool,
@@ -152,13 +152,13 @@ export type SwapOptionsSwapRouter02 = {
     s: string;
   } & (
     | {
-        amount: string;
-        deadline: string;
-      }
+      amount: string;
+      deadline: string;
+    }
     | {
-        nonce: string;
-        expiry: string;
-      }
+      nonce: string;
+      expiry: string;
+    }
   );
 };
 

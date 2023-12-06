@@ -4,7 +4,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { Command, flags } from '@oclif/command';
 import { ParserOutput } from '@oclif/parser/lib/parse';
 import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
-import { Currency, CurrencyAmount, Token } from '@uniswap/sdk-core';
+import { Currency, CurrencyAmount, Token } from '@tendieswap/sdk-core';
 import { MethodParameters } from '@uniswap/v3-sdk';
 import bunyan, { default as Logger } from 'bunyan';
 import bunyanDebugStream from 'bunyan-debug-stream';
@@ -132,8 +132,8 @@ export abstract class BaseCommand extends Command {
     return this._log
       ? this._log
       : bunyan.createLogger({
-          name: 'Default Logger',
-        });
+        name: 'Default Logger',
+      });
   }
 
   get router() {
@@ -203,19 +203,19 @@ export abstract class BaseCommand extends Command {
       streams: debugJSON
         ? undefined
         : [
-            {
-              level: logLevel,
-              type: 'stream',
-              stream: bunyanDebugStream({
-                basepath: __dirname,
-                forceColor: false,
-                showDate: false,
-                showPid: false,
-                showLoggerName: false,
-                showLevel: !!debug,
-              }),
-            },
-          ],
+          {
+            level: logLevel,
+            type: 'stream',
+            stream: bunyanDebugStream({
+              basepath: __dirname,
+              forceColor: false,
+              showDate: false,
+              showPid: false,
+              showLoggerName: false,
+              showLevel: !!debug,
+            }),
+          },
+        ],
     });
 
     if (debug || debugJSON) {

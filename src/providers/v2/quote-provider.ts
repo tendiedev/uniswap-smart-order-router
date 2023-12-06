@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { TradeType } from '@uniswap/sdk-core';
+import { TradeType } from '@tendieswap/sdk-core';
 import {
   InsufficientInputAmountError,
   InsufficientReservesError,
@@ -39,7 +39,7 @@ export interface IV2QuoteProvider {
  */
 export class V2QuoteProvider implements IV2QuoteProvider {
   /* eslint-disable @typescript-eslint/no-empty-function */
-  constructor() {}
+  constructor() { }
   /* eslint-enable @typescript-eslint/no-empty-function */
 
   public async getQuotesManyExactIn(

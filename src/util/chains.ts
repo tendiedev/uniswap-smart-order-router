@@ -1,4 +1,4 @@
-import { Currency, Ether, NativeCurrency, Token } from '@uniswap/sdk-core';
+import { Currency, Ether, NativeCurrency, Token } from '@tendieswap/sdk-core';
 
 import { ChainId } from './chain-to-addresses';
 
@@ -88,7 +88,7 @@ export enum ChainName {
   BASE = 'base-mainnet',
   BASE_GOERLI = 'base-goerli',
   TENET_TESTNET = 'tenet-testnet',
-  TENET = 'tenet',
+  TENET = 'tenet-mainnet',
 }
 
 export enum NativeCurrencyName {

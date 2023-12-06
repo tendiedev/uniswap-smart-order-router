@@ -1,5 +1,5 @@
 import { Protocol } from '@uniswap/router-sdk';
-import { Currency, Token, TradeType } from '@uniswap/sdk-core';
+import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
 import _ from 'lodash';
 
 import {
@@ -152,11 +152,11 @@ export class V3Quoter extends BaseQuoter<V3CandidatePools, V3Route> {
     const quoteFn =
       tradeType == TradeType.EXACT_INPUT
         ? this.onChainQuoteProvider.getQuotesManyExactIn.bind(
-            this.onChainQuoteProvider
-          )
+          this.onChainQuoteProvider
+        )
         : this.onChainQuoteProvider.getQuotesManyExactOut.bind(
-            this.onChainQuoteProvider
-          );
+          this.onChainQuoteProvider
+        );
 
     const beforeQuotes = Date.now();
     log.info(

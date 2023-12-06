@@ -1,4 +1,4 @@
-import { Token } from '@uniswap/sdk-core';
+import { Token } from '@tendieswap/sdk-core';
 
 import { ChainId, log } from '../util';
 
@@ -44,7 +44,7 @@ export class TokenPropertiesProvider implements ITokenPropertiesProvider {
     private tokenPropertiesCache: ICache<TokenPropertiesResult>,
     private tokenFeeFetcher: ITokenFeeFetcher,
     private allowList = DEFAULT_ALLOWLIST
-  ) {}
+  ) { }
 
   public async getTokensProperties(
     tokens: Token[],
