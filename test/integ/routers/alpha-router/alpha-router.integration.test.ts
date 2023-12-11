@@ -4,7 +4,7 @@
 
 import { JsonRpcProvider, JsonRpcSigner } from '@ethersproject/providers';
 import { AllowanceTransfer, PermitSingle } from '@uniswap/permit2-sdk';
-import { Protocol } from '@uniswap/router-sdk';
+import { Protocol } from '@tendieswap/router-sdk';
 import {
   Currency,
   CurrencyAmount,
@@ -18,8 +18,8 @@ import {
   UNIVERSAL_ROUTER_ADDRESS as UNIVERSAL_ROUTER_ADDRESS_BY_CHAIN,
 } from '@tendieswap/universal-router-sdk-tenet';
 import { Permit2Permit } from '@tendieswap/universal-router-sdk-tenet/dist/utils/inputTokens';
-import { Pair } from '@uniswap/v2-sdk';
-import { encodeSqrtRatioX96, FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { Pair } from '@tendieswap/v2-sdk';
+import { encodeSqrtRatioX96, FeeAmount, Pool } from '@tendieswap/v3-sdk';
 import bunyan from 'bunyan';
 import { BigNumber, providers, Wallet } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';

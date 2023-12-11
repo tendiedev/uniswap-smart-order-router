@@ -1,10 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers';
-import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
-import { Protocol, SwapRouter, Trade } from '@uniswap/router-sdk';
+import DEFAULT_TOKEN_LIST from '@tendieswap/default-token-list';
+import { Protocol, SwapRouter, Trade } from '@tendieswap/router-sdk';
 import { Currency, Fraction, Token, TradeType } from '@tendieswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import { Pool, Position, SqrtPriceMath, TickMath } from '@uniswap/v3-sdk';
+import { Pool, Position, SqrtPriceMath, TickMath } from '@tendieswap/v3-sdk';
 import retry from 'async-retry';
 import JSBI from 'jsbi';
 import _ from 'lodash';
@@ -26,7 +26,6 @@ import {
   ISwapRouterProvider,
   ITokenPropertiesProvider,
   IV2QuoteProvider,
-  IV2SubgraphProvider,
   LegacyGasPriceProvider,
   NodeJSCache,
   OnChainGasPriceProvider,
@@ -38,7 +37,6 @@ import {
   TokenPropertiesProvider,
   TokenValidationResult,
   UniswapMulticallProvider,
-  URISubgraphProvider,
   V2QuoteProvider,
   V2SubgraphProviderWithFallBacks,
   V3SubgraphProviderWithFallBacks,
@@ -74,6 +72,10 @@ import {
   V3PoolProvider,
 } from '../../providers/v3/pool-provider';
 import {
+  IV2SubgraphProvider,
+  V2SubgraphProvider,
+} from '../../providers/v2/subgraph-provider';
+import {
   IV3SubgraphProvider,
   V3SubgraphProvider,
 } from '../../providers/v3/subgraph-provider';
@@ -83,7 +85,6 @@ import { CurrencyAmount } from '../../util/amounts';
 import { ChainId } from '../../util/chain-to-addresses';
 import {
   ID_TO_CHAIN_ID,
-  ID_TO_NETWORK_NAME,
   V2_SUPPORTED,
 } from '../../util/chains';
 import {
@@ -481,26 +482,26 @@ export class AlphaRouter
               maxTimeout: 1000,
             },
             /*batchParams=*/ {
-              multicallChunk: 24,
-              gasLimitPerCall: 1_200_000,
-              quoteMinSuccessRate: 0.1,
+              multicallChunk: 210,
+              gasLimitPerCall: 705_000,
+              quoteMinSuccessRate: 0.15,
             },
             /*gasErrorFailureOverride=*/ {
-              gasLimitOverride: 1_000_000,
-              multicallChunk: 24,
+              gasLimitOverride: 2_000_000,
+              multicallChunk: 70,
             },
             /*successRateFailureOverrides=*/ {
-              gasLimitOverride: 1_000_000,
-              multicallChunk: 24,
+              gasLimitOverride: 2_000_000,
+              multicallChunk: 70,
             },
-            /*blockNumberConfig=*/ {
+            /*blockNumberConfig= {
               baseBlockOffset: -10,
               rollback: {
                 enabled: true,
                 attemptsBeforeRollback: 1,
                 rollbackBlockOffset: -10,
               },
-            }
+            }*/
           );
           break;
         case ChainId.BASE:
@@ -666,21 +667,13 @@ export class AlphaRouter
         new TokenProvider(chainId, this.multicall2Provider)
       );
 
-    const chainName = ID_TO_NETWORK_NAME(chainId);
-
-    // ipfs urls in the following format: `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/${protocol}/${chainName}.json`;
     if (v2SubgraphProvider) {
       this.v2SubgraphProvider = v2SubgraphProvider;
     } else {
       this.v2SubgraphProvider = new V2SubgraphProviderWithFallBacks([
         new CachingV2SubgraphProvider(
           chainId,
-          new URISubgraphProvider(
-            chainId,
-            `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/v2/${chainName}.json`,
-            undefined,
-            0
-          ),
+          new V2SubgraphProvider(chainId),
           new NodeJSCache(new NodeCache({ stdTTL: 300, useClones: false }))
         ),
         new StaticV2SubgraphProvider(chainId),

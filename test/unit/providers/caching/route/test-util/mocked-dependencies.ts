@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Protocol } from '@uniswap/router-sdk';
+import { Protocol } from '@tendieswap/router-sdk';
 import { ChainId, TradeType } from '@tendieswap/sdk-core';
 import {
   DAI_MAINNET,

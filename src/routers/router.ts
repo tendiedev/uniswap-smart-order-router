@@ -4,7 +4,7 @@ import {
   MixedRouteSDK,
   Protocol,
   Trade,
-} from '@uniswap/router-sdk';
+} from '@tendieswap/router-sdk';
 import {
   Currency,
   Fraction,
@@ -13,13 +13,13 @@ import {
   TradeType,
 } from '@tendieswap/sdk-core';
 import { SwapOptions as UniversalRouterSwapOptions } from '@tendieswap/universal-router-sdk-tenet';
-import { Route as V2RouteRaw } from '@uniswap/v2-sdk';
+import { Route as V2RouteRaw } from '@tendieswap/v2-sdk';
 import {
   Pool,
   Position,
   MethodParameters as SDKMethodParameters,
   Route as V3RouteRaw,
-} from '@uniswap/v3-sdk';
+} from '@tendieswap/v3-sdk';
 
 import { SimulationStatus } from '../providers';
 import { CurrencyAmount } from '../util/amounts';

@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Token } from '@tendieswap/sdk-core';
-import { Pool } from '@uniswap/v3-sdk';
+import { Pool } from '@tendieswap/v3-sdk';
 
 import { ProviderConfig } from '../../../providers/provider';
 import {

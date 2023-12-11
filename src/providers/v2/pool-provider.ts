@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Token } from '@tendieswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
+import { Pair } from '@tendieswap/v2-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 

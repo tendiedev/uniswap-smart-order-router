@@ -1,4 +1,4 @@
-import { ApprovalTypes } from '@uniswap/router-sdk';
+import { ApprovalTypes } from '@tendieswap/router-sdk';
 import { Currency, CurrencyAmount } from '@tendieswap/sdk-core';
 
 import { SwapRouter02__factory } from '../types/other/factories/SwapRouter02__factory';

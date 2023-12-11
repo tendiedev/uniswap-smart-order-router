@@ -406,14 +406,14 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId in ChainId]: Token } = {
     ChainId.TENET_TESTNET,
     '0xF7c99B019424C7A89DAE252fD872F9b3EBe6cfaC',
     18,
-    'wTNT',
+    'WTENET',
     'Wrapped Tenet'
   ),
   [ChainId.TENET]: new Token(
     ChainId.TENET,
     '0xd6cb8a253e12893b0cF39Ca78F7d858652cCa1fe',
     18,
-    'wTNT',
+    'WTENET',
     'Wrapped Tenet'
   ),
 };

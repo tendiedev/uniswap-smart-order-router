@@ -1,5 +1,5 @@
 import { Token } from '@tendieswap/sdk-core';
-import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
+import { FACTORY_ADDRESS } from '@tendieswap/v3-sdk';
 
 import { ChainId, CHAIN_TO_ADDRESSES_MAP } from './chain-to-addresses';
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
@@ -108,7 +108,7 @@ export const NONFUNGIBLE_POSITION_MANAGER_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].nonfungiblePositionManagerAddress;
 export const V3_MIGRATOR_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].v3MigratorAddress;
-export const MULTICALL2_ADDRESS = '0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696';
+export const MULTICALL2_ADDRESS = '0x220E9001f2E2beb3c082ffA853B16aB2b69E4694';
 
 export type AddressMap = { [chainId: number]: string | undefined };
 

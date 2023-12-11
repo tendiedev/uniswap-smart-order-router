@@ -3,14 +3,14 @@ import {
   Protocol,
   SwapRouter as SwapRouter02,
   Trade,
-} from '@uniswap/router-sdk';
+} from '@tendieswap/router-sdk';
 import { Currency, TradeType } from '@tendieswap/sdk-core';
 import {
   SwapRouter as UniveralRouter,
   UNIVERSAL_ROUTER_ADDRESS,
 } from '@tendieswap/universal-router-sdk-tenet';
-import { Route as V2RouteRaw } from '@uniswap/v2-sdk';
-import { Route as V3RouteRaw } from '@uniswap/v3-sdk';
+import { Route as V2RouteRaw } from '@tendieswap/v2-sdk';
+import { Route as V3RouteRaw } from '@tendieswap/v3-sdk';
 import _ from 'lodash';
 
 import {

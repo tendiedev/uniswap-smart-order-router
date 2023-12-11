@@ -1,6 +1,6 @@
 import { Logger } from '@ethersproject/logger';
 import { flags } from '@oclif/command';
-import { Protocol } from '@uniswap/router-sdk';
+import { Protocol } from '@tendieswap/router-sdk';
 import { Currency, Percent, TradeType } from '@tendieswap/sdk-core';
 import dotenv from 'dotenv';
 import _ from 'lodash';
