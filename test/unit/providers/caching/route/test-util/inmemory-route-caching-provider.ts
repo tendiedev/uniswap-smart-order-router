@@ -1,6 +1,16 @@
 import { Protocol } from '@tendieswap/router-sdk';
-import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@tendieswap/sdk-core';
-import { CachedRoutes, CacheMode, IRouteCachingProvider } from '../../../../../../src';
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Token,
+  TradeType,
+} from '@tendieswap/sdk-core';
+import {
+  CachedRoutes,
+  CacheMode,
+  IRouteCachingProvider,
+} from '../../../../../../src';
 
 export class InMemoryRouteCachingProvider extends IRouteCachingProvider {
   public routesCache: Map<string, CachedRoutes> = new Map();
@@ -11,7 +21,10 @@ export class InMemoryRouteCachingProvider extends IRouteCachingProvider {
   public internalSetCacheRouteCalls: number = 0;
   public getCacheModeCalls: number = 0;
 
-  protected async _getBlocksToLive(_cachedRoutes: CachedRoutes, _amount: CurrencyAmount<Currency>): Promise<number> {
+  protected async _getBlocksToLive(
+    _cachedRoutes: CachedRoutes,
+    _amount: CurrencyAmount<Currency>
+  ): Promise<number> {
     return this.blocksToLive;
   }
 
@@ -24,17 +37,23 @@ export class InMemoryRouteCachingProvider extends IRouteCachingProvider {
   ): Promise<CachedRoutes | undefined> {
     this.internalGetCacheRouteCalls += 1;
 
-    const cacheKey = `${amount.currency.wrapped.symbol}/${quoteToken.symbol}/${chainId}/${tradeType}/${protocols.sort()}`;
+    const cacheKey = `${amount.currency.wrapped.symbol}/${quoteToken.symbol
+      }/${chainId}/${tradeType}/${protocols.sort()}`;
 
     return this.routesCache.get(cacheKey);
   }
 
-  protected async _setCachedRoute(cachedRoutes: CachedRoutes, _amount: CurrencyAmount<Currency>): Promise<boolean> {
+  protected async _setCachedRoute(
+    cachedRoutes: CachedRoutes,
+    _amount: CurrencyAmount<Currency>
+  ): Promise<boolean> {
     this.internalSetCacheRouteCalls += 1;
 
     if (this.forceFail) return false;
 
-    const cacheKey = `${cachedRoutes.tokenIn.symbol}/${cachedRoutes.tokenOut.symbol}/${cachedRoutes.chainId}/${cachedRoutes.tradeType}/${cachedRoutes.protocolsCovered.sort()}`;
+    const cacheKey = `${cachedRoutes.tokenIn.symbol}/${cachedRoutes.tokenOut.symbol
+      }/${cachedRoutes.chainId}/${cachedRoutes.tradeType
+      }/${cachedRoutes.protocolsCovered.sort()}`;
     this.routesCache.set(cacheKey, cachedRoutes);
 
     return true;

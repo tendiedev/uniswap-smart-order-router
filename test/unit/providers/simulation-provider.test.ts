@@ -324,9 +324,7 @@ describe('Eth estimate gas simulator', () => {
         return BigNumber.from(0);
       },
     } as unknown as Erc20;
-    sinon
-      .stub(provider, <any>'getBalance')
-      .resolves(BigNumber.from(325));
+    sinon.stub(provider, <any>'getBalance').resolves(BigNumber.from(325));
     const swapRouteWithGasEstimate = await simulator.simulate(
       fromAddress,
       swapOptions,
@@ -399,10 +397,10 @@ describe('Eth estimate gas simulator', () => {
     );
   });
   test('when provider.estimateGas throws', async () => {
-    sinon
-      .stub(provider, <any>'getBalance')
-      .resolves(BigNumber.from(325));
-    sinon.replace(provider, 'estimateGas', () => { throw new Error() })
+    sinon.stub(provider, <any>'getBalance').resolves(BigNumber.from(325));
+    sinon.replace(provider, 'estimateGas', () => {
+      throw new Error();
+    });
     const swapRouteWithGasEstimate = await simulator.simulate(
       fromAddress,
       swapOptions,
