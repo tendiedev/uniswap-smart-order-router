@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
+import { Protocol } from '@tendieswap/router-sdk';
 import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
 import { Pair } from '@tendieswap/v2-sdk';
 import { Pool } from '@tendieswap/v3-sdk';
@@ -23,6 +24,8 @@ import { AlphaRouterConfig } from '../alpha-router';
 import { RouteWithValidQuote } from '../entities/route-with-valid-quote';
 import {
   CandidatePoolsBySelectionCriteria,
+  V2CandidatePools,
+  V3CandidatePools,
 } from '../functions/get-candidate-pools';
 import { IGasModel } from '../gas-models';
 
@@ -33,23 +36,32 @@ import { GetQuotesResult, GetRoutesResult } from './model/results';
  * Defines the base dependencies, helper methods and interface for how to fetch quotes.
  *
  * @abstract
+ * @template CandidatePools
  * @template Route
  */
-export abstract class BaseQuoter<Route extends V2Route | V3Route | MixedRoute> {
+export abstract class BaseQuoter<
+  CandidatePools extends
+  | V2CandidatePools
+  | V3CandidatePools
+  | [V3CandidatePools, V2CandidatePools],
+  Route extends V2Route | V3Route | MixedRoute
+> {
   protected tokenProvider: ITokenProvider;
   protected chainId: ChainId;
+  protected protocol: Protocol;
   protected blockedTokenListProvider?: ITokenListProvider;
   protected tokenValidatorProvider?: ITokenValidatorProvider;
-  protected abstract quoterVersion: string;
 
   constructor(
     tokenProvider: ITokenProvider,
     chainId: ChainId,
+    protocol: Protocol,
     blockedTokenListProvider?: ITokenListProvider,
     tokenValidatorProvider?: ITokenValidatorProvider
   ) {
     this.tokenProvider = tokenProvider;
     this.chainId = chainId;
+    this.protocol = protocol;
     this.blockedTokenListProvider = blockedTokenListProvider;
     this.tokenValidatorProvider = tokenValidatorProvider;
   }
@@ -61,6 +73,7 @@ export abstract class BaseQuoter<Route extends V2Route | V3Route | MixedRoute> {
    * @abstract
    * @param tokenIn The token that the user wants to provide
    * @param tokenOut The token that the usaw wants to receive
+   * @param candidatePools the candidate pools that are used to generate the routes
    * @param tradeType The type of quote the user wants. He could want to provide exactly X tokenIn or receive exactly X tokenOut
    * @param routingConfig
    * @returns Promise<GetRoutesResult<Route>>
@@ -68,6 +81,7 @@ export abstract class BaseQuoter<Route extends V2Route | V3Route | MixedRoute> {
   protected abstract getRoutes(
     tokenIn: Token,
     tokenOut: Token,
+    candidatePools: CandidatePools,
     tradeType: TradeType,
     routingConfig: AlphaRouterConfig
   ): Promise<GetRoutesResult<Route>>;
@@ -106,6 +120,7 @@ export abstract class BaseQuoter<Route extends V2Route | V3Route | MixedRoute> {
    * @param amounts the list of amounts to query for EACH route.
    * @param percents the percentage of each amount.
    * @param quoteToken
+   * @param candidatePools
    * @param tradeType
    * @param routingConfig
    * @param gasModel the gasModel to be used for estimating gas cost
@@ -114,49 +129,59 @@ export abstract class BaseQuoter<Route extends V2Route | V3Route | MixedRoute> {
   public getRoutesThenQuotes(
     tokenIn: Token,
     tokenOut: Token,
+    amount: CurrencyAmount,
     amounts: CurrencyAmount[],
     percents: number[],
     quoteToken: Token,
+    candidatePools: CandidatePools,
     tradeType: TradeType,
     routingConfig: AlphaRouterConfig,
     gasModel?: IGasModel<RouteWithValidQuote>,
     gasPriceWei?: BigNumber
   ): Promise<GetQuotesResult> {
-    const beforeGetRoutesThenQuotes = Date.now();
-
-    return this.getRoutes(tokenIn, tokenOut, tradeType, routingConfig)
-      .then((routesResult) => {
-        const beforeGetQuotes = Date.now();
-
-        return this.getQuotes(
-          routesResult.routes,
-          amounts,
-          percents,
-          quoteToken,
-          tradeType,
-          routingConfig,
-          routesResult.candidatePools,
-          gasModel,
-          gasPriceWei
-        ).then((quotesResult) => {
-          metric.putMetric(
-            `${this.quoterVersion}OverallGetQuotesLoad`,
-            Date.now() - beforeGetQuotes,
-            MetricLoggerUnit.Milliseconds
-          );
-
-          return quotesResult;
-        });
-      })
-      .then((quotesResult) => {
+    return this.getRoutes(
+      tokenIn,
+      tokenOut,
+      candidatePools,
+      tradeType,
+      routingConfig
+    ).then((routesResult) => {
+      if (routesResult.routes.length == 1) {
         metric.putMetric(
-          `${this.quoterVersion}OverallGetRoutesThenQuotesLoad`,
-          Date.now() - beforeGetRoutesThenQuotes,
-          MetricLoggerUnit.Milliseconds
+          `${this.protocol}QuoterSingleRoute`,
+          1,
+          MetricLoggerUnit.Count
         );
+        percents = [100];
+        amounts = [amount];
+      }
 
-        return quotesResult;
-      });
+      if (routesResult.routes.length > 0) {
+        metric.putMetric(
+          `${this.protocol}QuoterRoutesFound`,
+          routesResult.routes.length,
+          MetricLoggerUnit.Count
+        );
+      } else {
+        metric.putMetric(
+          `${this.protocol}QuoterNoRoutesFound`,
+          routesResult.routes.length,
+          MetricLoggerUnit.Count
+        );
+      }
+
+      return this.getQuotes(
+        routesResult.routes,
+        amounts,
+        percents,
+        quoteToken,
+        tradeType,
+        routingConfig,
+        routesResult.candidatePools,
+        gasModel,
+        gasPriceWei
+      );
+    });
   }
 
   protected async applyTokenValidatorToPools<T extends Pool | Pair>(

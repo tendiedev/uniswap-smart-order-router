@@ -4,7 +4,11 @@ import { EIP1559GasPriceProvider } from './eip-1559-gas-price-provider';
 import { GasPrice, IGasPriceProvider } from './gas-price-provider';
 import { LegacyGasPriceProvider } from './legacy-gas-price-provider';
 
-const DEFAULT_EIP_1559_SUPPORTED_CHAINS: ChainId[] = [];
+const DEFAULT_EIP_1559_SUPPORTED_CHAINS = [
+  ChainId.MAINNET,
+  ChainId.GOERLI,
+  ChainId.POLYGON_MUMBAI,
+];
 
 /**
  * Gets gas prices on chain. If the chain supports EIP-1559 and has the feeHistory API,

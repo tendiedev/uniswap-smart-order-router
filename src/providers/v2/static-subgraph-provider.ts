@@ -6,8 +6,10 @@ import { ChainId } from '../../util/chain-to-addresses';
 import { WRAPPED_NATIVE_CURRENCY } from '../../util/chains';
 import { log } from '../../util/log';
 import {
-  USDC_TENET,
-  USDT_TENET,
+  DAI_MAINNET,
+  USDC_MAINNET,
+  USDT_MAINNET,
+  WBTC_MAINNET,
 } from '../token-provider';
 
 import { IV2SubgraphProvider, V2SubgraphPool } from './subgraph-provider';
@@ -17,12 +19,32 @@ type ChainTokenList = {
 };
 
 const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
-  [ChainId.TENET_TESTNET]: [],
-  [ChainId.TENET]: [
-    WRAPPED_NATIVE_CURRENCY[ChainId.TENET],
-    USDC_TENET,
-    USDT_TENET,
+  [ChainId.MAINNET]: [
+    WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET]!,
+    DAI_MAINNET,
+    USDC_MAINNET,
+    USDT_MAINNET,
+    WBTC_MAINNET,
   ],
+  [ChainId.GOERLI]: [WRAPPED_NATIVE_CURRENCY[ChainId.GOERLI]!],
+  [ChainId.SEPOLIA]: [WRAPPED_NATIVE_CURRENCY[ChainId.SEPOLIA]!],
+  //v2 not deployed on [optimism, arbitrum, polygon, celo, gnosis, moonbeam, bnb, avalanche] and their testnets
+  [ChainId.OPTIMISM]: [],
+  [ChainId.ARBITRUM_ONE]: [],
+  [ChainId.ARBITRUM_GOERLI]: [],
+  [ChainId.OPTIMISM_GOERLI]: [],
+  [ChainId.POLYGON]: [],
+  [ChainId.POLYGON_MUMBAI]: [],
+  [ChainId.CELO]: [],
+  [ChainId.CELO_ALFAJORES]: [],
+  [ChainId.GNOSIS]: [],
+  [ChainId.MOONBEAM]: [],
+  [ChainId.BNB]: [],
+  [ChainId.AVALANCHE]: [],
+  [ChainId.BASE_GOERLI]: [],
+  [ChainId.BASE]: [],
+  [ChainId.TENET_TESTNET]: [],
+  [ChainId.TENET]: [],
 };
 
 /**
@@ -74,8 +96,6 @@ export class StaticV2SubgraphProvider implements IV2SubgraphProvider {
 
     const subgraphPools: V2SubgraphPool[] = _(pairs)
       .map(([tokenA, tokenB]) => {
-        console.debug("TA1 " + JSON.stringify(tokenA, null, 2));
-        console.debug("TB1 " + JSON.stringify(tokenB, null, 2));
         const poolAddress = Pair.getAddress(tokenA, tokenB);
 
         if (poolAddressSet.has(poolAddress)) {

@@ -166,6 +166,11 @@ export class TenderlySimulator extends Simulator {
     const currencyIn = swapRoute.trade.inputAmount.currency;
     const tokenIn = currencyIn.wrapped;
     const chainId = this.chainId;
+    if ([ChainId.CELO, ChainId.CELO_ALFAJORES].includes(chainId)) {
+      const msg = 'Celo not supported by Tenderly!';
+      log.info(msg);
+      return { ...swapRoute, simulationStatus: SimulationStatus.NotSupported };
+    }
 
     if (!swapRoute.methodParameters) {
       const msg = 'No calldata provided to simulate transaction';
@@ -186,6 +191,7 @@ export class TenderlySimulator extends Simulator {
       'Simulating transaction on Tenderly'
     );
 
+    const blockNumber = await providerConfig?.blockNumber;
     let estimatedGasUsed: BigNumber;
     const estimateMultiplier =
       this.overrideEstimateMultiplier[chainId] ?? DEFAULT_ESTIMATE_MULTIPLIER;
@@ -234,7 +240,11 @@ export class TenderlySimulator extends Simulator {
         to: UNIVERSAL_ROUTER_ADDRESS(this.chainId),
         value: currencyIn.isNative ? swapRoute.methodParameters.value : '0',
         from: fromAddress,
-        block_number: undefined
+        // TODO: This is a Temporary fix given by Tenderly team, remove once resolved on their end.
+        block_number:
+          chainId == ChainId.ARBITRUM_ONE && blockNumber
+            ? blockNumber - 5
+            : undefined,
       };
 
       const body = {
@@ -314,7 +324,11 @@ export class TenderlySimulator extends Simulator {
         estimate_gas: true,
         value: currencyIn.isNative ? swapRoute.methodParameters.value : '0',
         from: fromAddress,
-        block_number: undefined
+        // TODO: This is a Temporary fix given by Tenderly team, remove once resolved on their end.
+        block_number:
+          chainId == ChainId.ARBITRUM_ONE && blockNumber
+            ? blockNumber - 5
+            : undefined,
       };
 
       const body = { simulations: [approve, swap] };

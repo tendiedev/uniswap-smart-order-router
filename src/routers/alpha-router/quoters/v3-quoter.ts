@@ -1,3 +1,4 @@
+import { Protocol } from '@tendieswap/router-sdk';
 import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
 import _ from 'lodash';
 
@@ -24,7 +25,7 @@ import { V3RouteWithValidQuote } from '../entities';
 import { computeAllV3Routes } from '../functions/compute-all-routes';
 import {
   CandidatePoolsBySelectionCriteria,
-  getV3CandidatePools,
+  V3CandidatePools,
 } from '../functions/get-candidate-pools';
 import { IGasModel } from '../gas-models';
 
@@ -32,11 +33,10 @@ import { BaseQuoter } from './base-quoter';
 import { GetQuotesResult } from './model/results/get-quotes-result';
 import { GetRoutesResult } from './model/results/get-routes-result';
 
-export class V3Quoter extends BaseQuoter<V3Route> {
+export class V3Quoter extends BaseQuoter<V3CandidatePools, V3Route> {
   protected v3SubgraphProvider: IV3SubgraphProvider;
   protected v3PoolProvider: IV3PoolProvider;
   protected onChainQuoteProvider: IOnChainQuoteProvider;
-  protected override quoterVersion = 'V3';
 
   constructor(
     v3SubgraphProvider: IV3SubgraphProvider,
@@ -50,6 +50,7 @@ export class V3Quoter extends BaseQuoter<V3Route> {
     super(
       tokenProvider,
       chainId,
+      Protocol.V3,
       blockedTokenListProvider,
       tokenValidatorProvider
     );
@@ -61,23 +62,15 @@ export class V3Quoter extends BaseQuoter<V3Route> {
   protected async getRoutes(
     tokenIn: Token,
     tokenOut: Token,
-    tradeType: TradeType,
+    v3CandidatePools: V3CandidatePools,
+    _tradeType: TradeType,
     routingConfig: AlphaRouterConfig
   ): Promise<GetRoutesResult<V3Route>> {
+    const beforeGetRoutes = Date.now();
     // Fetch all the pools that we will consider routing via. There are thousands
     // of pools, so we filter them to a set of candidate pools that we expect will
     // result in good prices.
-    const { poolAccessor, candidatePools } = await getV3CandidatePools({
-      tokenIn,
-      tokenOut,
-      tokenProvider: this.tokenProvider,
-      blockedTokenListProvider: this.blockedTokenListProvider,
-      poolProvider: this.v3PoolProvider,
-      routeType: tradeType,
-      subgraphProvider: this.v3SubgraphProvider,
-      routingConfig,
-      chainId: this.chainId,
-    });
+    const { poolAccessor, candidatePools } = v3CandidatePools;
     const poolsRaw = poolAccessor.getAllPools();
 
     // Drop any pools that contain fee on transfer tokens (not supported by v3) or have issues with being transferred.
@@ -120,6 +113,12 @@ export class V3Quoter extends BaseQuoter<V3Route> {
       maxSwapsPerPath
     );
 
+    metric.putMetric(
+      'V3GetRoutesLoad',
+      Date.now() - beforeGetRoutes,
+      MetricLoggerUnit.Milliseconds
+    );
+
     return {
       routes,
       candidatePools,
@@ -136,6 +135,7 @@ export class V3Quoter extends BaseQuoter<V3Route> {
     candidatePools?: CandidatePoolsBySelectionCriteria,
     gasModel?: IGasModel<V3RouteWithValidQuote>
   ): Promise<GetQuotesResult> {
+    const beforeGetQuotes = Date.now();
     log.info('Starting to get V3 quotes');
 
     if (gasModel === undefined) {
@@ -230,6 +230,12 @@ export class V3Quoter extends BaseQuoter<V3Route> {
         routesWithValidQuotes.push(routeWithValidQuote);
       }
     }
+
+    metric.putMetric(
+      'V3GetQuotesLoad',
+      Date.now() - beforeGetQuotes,
+      MetricLoggerUnit.Milliseconds
+    );
 
     return {
       routesWithValidQuotes,

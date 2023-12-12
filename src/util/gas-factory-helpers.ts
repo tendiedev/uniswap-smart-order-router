@@ -28,12 +28,16 @@ import { buildTrade } from './methodParameters';
 
 export async function getV2NativePool(
   token: Token,
-  poolProvider: IV2PoolProvider
+  poolProvider: IV2PoolProvider,
+  providerConfig?: ProviderConfig
 ): Promise<Pair | null> {
   const chainId = token.chainId as ChainId;
   const weth = WRAPPED_NATIVE_CURRENCY[chainId]!;
 
-  const poolAccessor = await poolProvider.getPools([[weth, token]]);
+  const poolAccessor = await poolProvider.getPools(
+    [[weth, token]],
+    providerConfig
+  );
   const pool = poolAccessor.getPool(weth, token);
 
   if (!pool || pool.reserve0.equalTo(0) || pool.reserve1.equalTo(0)) {
@@ -263,13 +267,28 @@ export async function calculateGasUsed(
   l2GasData?: ArbitrumGasData | OptimismGasData,
   providerConfig?: ProviderConfig
 ) {
-  if (!l2GasData) {
-    l2GasData = undefined;
-  }
   const quoteToken = route.quote.currency.wrapped;
   const gasPriceWei = route.gasPriceWei;
   // calculate L2 to L1 security fee if relevant
-  const l2toL1FeeInWei = BigNumber.from(0);
+  let l2toL1FeeInWei = BigNumber.from(0);
+  if ([ChainId.ARBITRUM_ONE, ChainId.ARBITRUM_GOERLI].includes(chainId)) {
+    l2toL1FeeInWei = calculateArbitrumToL1FeeFromCalldata(
+      route.methodParameters!.calldata,
+      l2GasData as ArbitrumGasData
+    )[1];
+  } else if (
+    [
+      ChainId.OPTIMISM,
+      ChainId.OPTIMISM_GOERLI,
+      ChainId.BASE,
+      ChainId.BASE_GOERLI,
+    ].includes(chainId)
+  ) {
+    l2toL1FeeInWei = calculateOptimismToL1FeeFromCalldata(
+      route.methodParameters!.calldata,
+      l2GasData as OptimismGasData
+    )[1];
+  }
 
   // add l2 to l1 fee and wrap fee to native currency
   const gasCostInWei = gasPriceWei.mul(simulatedGasUsed).add(l2toL1FeeInWei);
@@ -296,7 +315,7 @@ export async function calculateGasUsed(
         v3PoolProvider,
         providerConfig
       ),
-      getV2NativePool(quoteToken, v2PoolProvider),
+      getV2NativePool(quoteToken, v2PoolProvider, providerConfig),
     ]);
     const nativePool = nativePools.find((pool) => pool !== null);
 

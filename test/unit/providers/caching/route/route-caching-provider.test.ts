@@ -1,10 +1,6 @@
 import { Protocol } from '@tendieswap/router-sdk';
 import { CurrencyAmount, TradeType } from '@tendieswap/sdk-core';
-import {
-  DAI_MAINNET as DAI,
-  USDC_MAINNET as USDC,
-  WBTC_MAINNET as WBTC,
-} from '../../../../../build/main';
+import { DAI_MAINNET as DAI, USDC_MAINNET as USDC, WBTC_MAINNET as WBTC } from '../../../../../build/main';
 import { CachedRoutes, CacheMode } from '../../../../../src';
 import { InMemoryRouteCachingProvider } from './test-util/inmemory-route-caching-provider';
 import { getCachedRoutesStub } from './test-util/mocked-dependencies';
@@ -39,10 +35,7 @@ describe('RouteCachingProvider', () => {
       it('does not update cachedRoutes.blocksToLive before inserting in cache', async () => {
         expect(uncachedRoute.blocksToLive).toEqual(0);
 
-        await routeCachingProvider.setCachedRoute(
-          uncachedRoute,
-          CurrencyAmount.fromRawAmount(USDC, 100)
-        );
+        await routeCachingProvider.setCachedRoute(uncachedRoute, CurrencyAmount.fromRawAmount(USDC, 100));
 
         expect(uncachedRoute.blocksToLive).toEqual(0);
       });
@@ -69,15 +62,10 @@ describe('RouteCachingProvider', () => {
         it('updates cachedRoutes.blocksToLive before inserting in cache', async () => {
           expect(uncachedRoute.blocksToLive).toEqual(0);
 
-          await routeCachingProvider.setCachedRoute(
-            uncachedRoute,
-            CurrencyAmount.fromRawAmount(USDC, 100)
-          );
+          await routeCachingProvider.setCachedRoute(uncachedRoute, CurrencyAmount.fromRawAmount(USDC, 100));
 
           expect(uncachedRoute.blocksToLive).not.toEqual(0);
-          expect(uncachedRoute.blocksToLive).toEqual(
-            routeCachingProvider.blocksToLive
-          );
+          expect(uncachedRoute.blocksToLive).toEqual(routeCachingProvider.blocksToLive);
         });
 
         it('inserts cachedRoutes in the cache', async () => {
@@ -111,10 +99,7 @@ describe('RouteCachingProvider', () => {
       beforeEach(async () => {
         routeCachingProvider.cacheMode = CacheMode.Livemode; // set to livemode in order to test.
         cachedRoute = getCachedRoutesStub(blockNumber)!;
-        await routeCachingProvider.setCachedRoute(
-          cachedRoute,
-          CurrencyAmount.fromRawAmount(USDC, 100)
-        );
+        await routeCachingProvider.setCachedRoute(cachedRoute, CurrencyAmount.fromRawAmount(USDC, 100));
       });
 
       it('gets the route in cache when requested', async () => {

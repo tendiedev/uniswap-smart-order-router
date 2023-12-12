@@ -13,7 +13,7 @@ import stats from 'stats-lite';
 import { MixedRoute, V2Route, V3Route } from '../routers/router';
 import { IMixedRouteQuoterV1__factory } from '../types/other/factories/IMixedRouteQuoterV1__factory';
 import { IQuoterV2__factory } from '../types/v3/factories/IQuoterV2__factory';
-import { metric, MetricLoggerUnit } from '../util';
+import { ID_TO_NETWORK_NAME, metric, MetricLoggerUnit } from '../util';
 import {
   MIXED_ROUTE_QUOTER_V1_ADDRESSES,
   QUOTER_V2_ADDRESSES,
@@ -55,6 +55,7 @@ export type AmountQuote = {
 export class BlockConflictError extends Error {
   public name = 'BlockConflictError';
 }
+
 export class SuccessRateError extends Error {
   public name = 'SuccessRateError';
 }
@@ -417,6 +418,13 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
       } and block number: ${await providerConfig.blockNumber} [Original before offset: ${originalBlockNumber}].`
     );
 
+    metric.putMetric('QuoteBatchSize', inputs.length, MetricLoggerUnit.Count);
+    metric.putMetric(
+      `QuoteBatchSize_${ID_TO_NETWORK_NAME(this.chainId)}`,
+      inputs.length,
+      MetricLoggerUnit.Count
+    );
+
     let haveRetriedForSuccessRate = false;
     let haveRetriedForBlockHeader = false;
     let blockHeaderRetryAttemptNumber = 0;
@@ -698,6 +706,34 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
         }
 
         if (failedQuoteStates.length > 0) {
+          // TODO: Work with Arbitrum to find a solution for making large multicalls with gas limits that always
+          // successfully.
+          //
+          // On Arbitrum we can not set a gas limit for every call in the multicall and guarantee that
+          // we will not run out of gas on the node. This is because they have a different way of accounting
+          // for gas, that seperates storage and compute gas costs, and we can not cover both in a single limit.
+          //
+          // To work around this and avoid throwing errors when really we just couldn't get a quote, we catch this
+          // case and return 0 quotes found.
+          if (
+            (this.chainId == ChainId.ARBITRUM_ONE ||
+              this.chainId == ChainId.ARBITRUM_GOERLI) &&
+            _.every(
+              failedQuoteStates,
+              (failedQuoteState) =>
+                failedQuoteState.reason instanceof ProviderGasError
+            ) &&
+            attemptNumber == this.retryOptions.retries
+          ) {
+            log.error(
+              `Failed to get quotes on Arbitrum due to provider gas error issue. Overriding error to return 0 quotes.`
+            );
+            return {
+              results: [],
+              blockNumber: BigNumber.from(0),
+              approxGasUsedPerSuccessCall: 0,
+            };
+          }
           throw new Error(
             `Failed to get ${failedQuoteStates.length} quotes. Reasons: ${reasonForFailureStr}`
           );
