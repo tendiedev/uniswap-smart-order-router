@@ -6,10 +6,8 @@ import { ChainId } from '../../util/chain-to-addresses';
 import { WRAPPED_NATIVE_CURRENCY } from '../../util/chains';
 import { log } from '../../util/log';
 import {
-  DAI_MAINNET,
-  USDC_MAINNET,
-  USDT_MAINNET,
-  WBTC_MAINNET,
+  USDC_TENET,
+  USDT_TENET,
 } from '../token-provider';
 
 import { IV2SubgraphProvider, V2SubgraphPool } from './subgraph-provider';
@@ -20,7 +18,11 @@ type ChainTokenList = {
 
 const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.TENET_TESTNET]: [],
-  [ChainId.TENET]: [],
+  [ChainId.TENET]: [
+    WRAPPED_NATIVE_CURRENCY[ChainId.TENET],
+    USDC_TENET,
+    USDT_TENET,
+  ],
 };
 
 /**

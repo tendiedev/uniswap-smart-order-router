@@ -24,7 +24,6 @@ import {
   IOnChainQuoteProvider,
   IRouteCachingProvider,
   ISwapRouterProvider,
-  ITokenPropertiesProvider,
   IV2QuoteProvider,
   LegacyGasPriceProvider,
   NodeJSCache,
@@ -34,8 +33,6 @@ import {
   StaticV2SubgraphProvider,
   StaticV3SubgraphProvider,
   SwapRouterProvider,
-  TokenPropertiesProvider,
-  TokenValidationResult,
   UniswapMulticallProvider,
   V2QuoteProvider,
   V2SubgraphProviderWithFallBacks,
@@ -50,7 +47,6 @@ import {
   IGasPriceProvider,
 } from '../../providers/gas-price-provider';
 import { ProviderConfig } from '../../providers/provider';
-import { OnChainTokenFeeFetcher } from '../../providers/token-fee-fetcher';
 import { ITokenProvider, TokenProvider } from '../../providers/token-provider';
 import {
   ITokenValidatorProvider,
@@ -62,10 +58,8 @@ import {
 } from '../../providers/v2/pool-provider';
 import {
   ArbitrumGasData,
-  ArbitrumGasDataProvider,
   IL2GasDataProvider,
   OptimismGasData,
-  OptimismGasDataProvider,
 } from '../../providers/v3/gas-data-provider';
 import {
   IV3PoolProvider,
@@ -110,7 +104,6 @@ import {
   SwapRoute,
   SwapToRatioResponse,
   SwapToRatioStatus,
-  V2Route,
   V3Route,
 } from '../router';
 
@@ -127,11 +120,7 @@ import { BestSwapRoute, getBestSwapRoute } from './functions/best-swap-route';
 import { calculateRatioAmountIn } from './functions/calculate-ratio-amount-in';
 import {
   CandidatePoolsBySelectionCriteria,
-  getV2CandidatePools,
-  getV3CandidatePools,
   PoolId,
-  V2CandidatePools,
-  V3CandidatePools,
 } from './functions/get-candidate-pools';
 import {
   IGasModel,
@@ -141,7 +130,6 @@ import {
 } from './gas-models/gas-model';
 import { MixedRouteHeuristicGasModelFactory } from './gas-models/mixedRoute/mixed-route-heuristic-gas-model';
 import { V2HeuristicGasModelFactory } from './gas-models/v2/v2-heuristic-gas-model';
-import { NATIVE_OVERHEAD } from './gas-models/v3/gas-costs';
 import { V3HeuristicGasModelFactory } from './gas-models/v3/v3-heuristic-gas-model';
 import { GetQuotesResult, MixedQuoter, V2Quoter, V3Quoter } from './quoters';
 
@@ -501,7 +489,6 @@ export class AlphaRouter
         new TokenProvider(chainId, this.multicall2Provider)
       );
 
-
     // ipfs urls in the following format: `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/${protocol}/${chainName}.json`;
     if (v2SubgraphProvider) {
       this.v2SubgraphProvider = v2SubgraphProvider;
@@ -510,7 +497,6 @@ export class AlphaRouter
         new CachingV2SubgraphProvider(
           chainId,
           new V2SubgraphProvider(chainId),
-
           new NodeJSCache(new NodeCache({ stdTTL: 300, useClones: false }))
         ),
         new StaticV2SubgraphProvider(chainId),
@@ -524,7 +510,6 @@ export class AlphaRouter
         new CachingV3SubgraphProvider(
           chainId,
           new V3SubgraphProvider(chainId),
-
           new NodeJSCache(new NodeCache({ stdTTL: 300, useClones: false }))
         ),
         new StaticV3SubgraphProvider(chainId, this.v3PoolProvider),

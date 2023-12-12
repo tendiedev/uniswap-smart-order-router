@@ -1,5 +1,4 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Protocol } from '@tendieswap/router-sdk';
 import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
 import _ from 'lodash';
 
@@ -26,7 +25,7 @@ import { V2RouteWithValidQuote } from '../entities';
 import { computeAllV2Routes } from '../functions/compute-all-routes';
 import {
   CandidatePoolsBySelectionCriteria,
-  V2CandidatePools,
+  getV2CandidatePools,
 } from '../functions/get-candidate-pools';
 import { IGasModel, IV2GasModelFactory } from '../gas-models';
 
@@ -180,7 +179,7 @@ export class V2Quoter extends BaseQuoter<V2Route> {
       MetricLoggerUnit.Count
     );
 
-    const routesWithValidQuotes = [];
+    const routesWithValidQuotes: V2RouteWithValidQuote[] = [];
 
     for (const routeWithQuote of routesWithQuotes) {
       const [route, quotes] = routeWithQuote;

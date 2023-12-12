@@ -8,9 +8,8 @@ import _ from 'lodash';
 import { IOnChainQuoteProvider, RouteWithQuotes } from '../../providers';
 import { IMulticallProvider } from '../../providers/multicall-provider';
 import {
-  DAI_MAINNET,
   ITokenProvider,
-  USDC_MAINNET,
+  USDT_TENET,
 } from '../../providers/token-provider';
 import { IV3PoolProvider } from '../../providers/v3/pool-provider';
 import { SWAP_ROUTER_02_ADDRESSES } from '../../util';
@@ -132,7 +131,7 @@ export class LegacyRouter {
         1
       ),
       estimatedGasUsedUSD: CurrencyAmount.fromFractionalAmount(
-        DAI_MAINNET!,
+        USDT_TENET!,
         0,
         1
       ),
@@ -186,11 +185,7 @@ export class LegacyRouter {
         0,
         1
       ),
-      estimatedGasUsedUSD: CurrencyAmount.fromFractionalAmount(
-        DAI_MAINNET,
-        0,
-        1
-      ),
+      estimatedGasUsedUSD: CurrencyAmount.fromFractionalAmount(USDT_TENET, 0, 1),
       gasPriceWei: BigNumber.from(0),
       trade,
       methodParameters: swapConfig
@@ -309,7 +304,7 @@ export class LegacyRouter {
         gasModel: {
           estimateGasCost: () => ({
             gasCostInToken: CurrencyAmount.fromRawAmount(quoteToken, 0),
-            gasCostInUSD: CurrencyAmount.fromRawAmount(USDC_MAINNET, 0),
+            gasCostInUSD: CurrencyAmount.fromRawAmount(USDT_TENET, 0),
             gasEstimate: BigNumber.from(0),
           }),
         },

@@ -113,9 +113,7 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
       /// MixedRoutes
       nativeV2Pool = await getV2NativePool(
         quoteToken,
-        V2poolProvider,
-        providerConfig
-      );
+        V2poolProvider);
     }
 
     const usdToken =
@@ -237,8 +235,8 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
 
     const res = partitionMixedRouteByProtocol(route);
     res.map((section: (Pair | Pool)[]) => {
-      if (section.every((pool) => pool instanceof Pool)) {
-        baseGasUse = baseGasUse.add(BASE_SWAP_COST(chainId));
+      if (section && section.every((pool) => pool instanceof Pool)) {
+        baseGasUse = baseGasUse?.add(BASE_SWAP_COST(chainId));
         baseGasUse = baseGasUse.add(COST_PER_HOP(chainId).mul(section.length));
       } else if (section.every((pool) => pool instanceof Pair)) {
         baseGasUse = baseGasUse.add(BASE_SWAP_COST_V2);
