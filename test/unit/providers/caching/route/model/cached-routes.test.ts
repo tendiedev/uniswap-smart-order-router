@@ -1,4 +1,4 @@
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 import { ChainId, TradeType } from '@tendieswap/sdk-core';
 import { V3RouteWithValidQuote } from '../../../../../../build/main';
 import { CachedRoutes, DAI_MAINNET as DAI, USDC_MAINNET as USDC } from '../../../../../../src';

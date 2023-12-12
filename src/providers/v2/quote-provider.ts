@@ -3,7 +3,7 @@ import { TradeType } from '@tendieswap/sdk-core';
 import {
   InsufficientInputAmountError,
   InsufficientReservesError,
-} from '@tendieswap/v2-sdk';
+} from '@uniswap/v2-sdk';
 
 import { V2Route } from '../../routers/router';
 import { CurrencyAmount } from '../../util/amounts';

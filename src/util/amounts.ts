@@ -3,7 +3,7 @@ import {
   Currency,
   CurrencyAmount as CurrencyAmountRaw,
 } from '@tendieswap/sdk-core';
-import { FeeAmount } from '@tendieswap/v3-sdk';
+import { FeeAmount } from '@uniswap/v3-sdk';
 import JSBI from 'jsbi';
 
 export class CurrencyAmount extends CurrencyAmountRaw<Currency> { }

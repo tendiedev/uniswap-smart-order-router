@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Token } from '@tendieswap/sdk-core';
-import { Pair } from '@tendieswap/v2-sdk';
+import { Pair } from '@uniswap/v2-sdk';
 import _ from 'lodash';
 
 import { ProviderConfig } from '../../../../providers/provider';

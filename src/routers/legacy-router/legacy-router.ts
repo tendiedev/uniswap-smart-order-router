@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
-import { SwapRouter, Trade } from '@tendieswap/router-sdk';
+import { SwapRouter, Trade } from '@uniswap/router-sdk';
 import { Currency, Token, TradeType } from '@tendieswap/sdk-core';
-import { FeeAmount, MethodParameters, Pool, Route } from '@tendieswap/v3-sdk';
+import { FeeAmount, MethodParameters, Pool, Route } from '@uniswap/v3-sdk';
 import _ from 'lodash';
 
 import { IOnChainQuoteProvider, RouteWithQuotes } from '../../providers';

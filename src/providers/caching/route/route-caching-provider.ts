@@ -4,7 +4,7 @@
  * @export
  * @interface IRouteCachingProvider
  */
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 import { Currency, CurrencyAmount, Token, TradeType } from '@tendieswap/sdk-core';
 
 import { ChainId } from '../../../util/chain-to-addresses';

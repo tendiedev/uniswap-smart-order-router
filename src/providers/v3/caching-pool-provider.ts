@@ -1,5 +1,5 @@
 import { Token } from '@tendieswap/sdk-core';
-import { FeeAmount, Pool } from '@tendieswap/v3-sdk';
+import { FeeAmount, Pool } from '@uniswap/v3-sdk';
 import _ from 'lodash';
 
 import { metric, MetricLoggerUnit } from '../../util';

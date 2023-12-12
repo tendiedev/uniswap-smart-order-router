@@ -1,6 +1,6 @@
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 import { Token, TradeType } from '@tendieswap/sdk-core';
-import { FeeAmount } from '@tendieswap/v3-sdk';
+import { FeeAmount } from '@uniswap/v3-sdk';
 import _ from 'lodash';
 
 import {

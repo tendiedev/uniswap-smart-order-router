@@ -1,4 +1,4 @@
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 
 export const TO_PROTOCOL = (protocol: string): Protocol => {
   switch (protocol.toLowerCase()) {

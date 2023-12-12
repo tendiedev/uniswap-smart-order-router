@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Token } from '@tendieswap/sdk-core';
-import { computePoolAddress, FeeAmount, Pool } from '@tendieswap/v3-sdk';
+import { computePoolAddress, FeeAmount, Pool } from '@uniswap/v3-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 

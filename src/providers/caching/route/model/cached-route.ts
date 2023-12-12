@@ -1,6 +1,6 @@
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 import { Token } from '@tendieswap/sdk-core';
-import { Pool } from '@tendieswap/v3-sdk';
+import { Pool } from '@uniswap/v3-sdk';
 
 import { MixedRoute, V2Route, V3Route } from '../../../../routers';
 

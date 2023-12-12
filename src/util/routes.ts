@@ -1,7 +1,7 @@
-import { Protocol } from '@tendieswap/router-sdk';
+import { Protocol } from '@uniswap/router-sdk';
 import { Percent } from '@tendieswap/sdk-core';
-import { Pair } from '@tendieswap/v2-sdk';
-import { Pool } from '@tendieswap/v3-sdk';
+import { Pair } from '@uniswap/v2-sdk';
+import { Pool } from '@uniswap/v3-sdk';
 import _ from 'lodash';
 
 import { RouteWithValidQuote } from '../routers/alpha-router';
@@ -27,17 +27,17 @@ export const routeToString = (
       : route.pairs;
   const poolFeePath = _.map(pools, (pool) => {
     return `${pool instanceof Pool
-      ? ` -- ${pool.fee / 10000}% [${Pool.getAddress(
-        pool.token0,
-        pool.token1,
-        pool.fee,
-        undefined,
-        V3_CORE_FACTORY_ADDRESSES[pool.chainId]
-      )}]`
-      : ` -- [${Pair.getAddress(
-        (pool as Pair).token0,
-        (pool as Pair).token1
-      )}]`
+        ? ` -- ${pool.fee / 10000}% [${Pool.getAddress(
+          pool.token0,
+          pool.token1,
+          pool.fee,
+          undefined,
+          V3_CORE_FACTORY_ADDRESSES[pool.chainId]
+        )}]`
+        : ` -- [${Pair.getAddress(
+          (pool as Pair).token0,
+          (pool as Pair).token1
+        )}]`
       } --> `;
   });
 
